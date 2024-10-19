@@ -1,22 +1,22 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report, accuracy_score
+from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
 from imblearn.over_sampling import SMOTE
 import joblib
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Carica i dataset
-frenate_df = pd.read_csv('fr.csv')
-incidenti_df = pd.read_csv('dataset_addestramento.csv')
-altro_df = pd.read_csv('oth.csv')
+incidenti_df = pd.read_csv('incidenti.csv')
+altro_df = pd.read_csv('altro.csv')
 
 # Aggiungi una colonna "evento" per indicare il tipo di evento
-frenate_df['evento'] = 'frenate'
 incidenti_df['evento'] = 'incidenti'
 altro_df['evento'] = 'altro'
 
-# Combina i dataset
-combined_df = pd.concat([frenate_df, incidenti_df, altro_df], ignore_index=True)
+# Combina i dataset "incidenti" e "altro"
+combined_df = pd.concat([incidenti_df, altro_df], ignore_index=True)
 
 # Prepara le feature e le etichette
 X = combined_df[['acc_x', 'acc_y', 'acc_z', 'gyro_x', 'gyro_y', 'gyro_z']]
@@ -39,5 +39,19 @@ print("Accuracy:", accuracy_score(y_test, y_pred))
 print("Classification Report:")
 print(classification_report(y_test, y_pred))
 
+# Stampa la matrice di confusione
+conf_matrix = confusion_matrix(y_test, y_pred)
+print("Confusion Matrix:")
+print(conf_matrix)
+
+# Plot della matrice di confusione
+plt.figure(figsize=(10, 7))
+sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues',
+            xticklabels=model.classes_, yticklabels=model.classes_)
+plt.xlabel('Predicted Label')
+plt.ylabel('True Label')
+plt.title('Confusion Matrix')
+plt.show()
+
 # Salva il modello
-joblib.dump(model, 'model.joblib')
+joblib.dump(model, 'model_binario.joblib')
