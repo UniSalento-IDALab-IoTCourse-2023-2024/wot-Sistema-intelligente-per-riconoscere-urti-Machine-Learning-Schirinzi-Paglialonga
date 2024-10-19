@@ -2,7 +2,7 @@ import pandas as pd
 import json
 
 # Percorso del file JSON di input
-input_json_path = 'dataset_generali.json'
+input_json_path = 'incident.json'
 
 # Leggere i dati dal file JSON
 with open(input_json_path, 'r') as file:
