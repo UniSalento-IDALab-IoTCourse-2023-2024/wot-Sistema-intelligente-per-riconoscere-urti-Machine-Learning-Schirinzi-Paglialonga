@@ -54,4 +54,4 @@ plt.title('Confusion Matrix')
 plt.show()
 
 # Salva il modello
-joblib.dump(model, 'model_binario.joblib')
+joblib.dump(model, 'model.joblib')
